@@ -86,6 +86,6 @@ def Make():
         if rm == 1:
             mode = random.randint(1, 3)
         switch[mode](url)
-        time.sleep(10)
+        time.sleep(1)
 if __name__ == '__main__':
     Make()
