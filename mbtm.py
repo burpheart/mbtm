@@ -50,15 +50,9 @@ def webshell_useing():
     mode=1
     print('test4')
     r =requests.get('https://www.baidu.com/')
-def XXE():
-    mode=1
-    print('test5')
-    r =requests.get('https://www.baidu.com/')
-def other():
-    return
 
 def Make():
-    switch = {1:webshell_upload, 2:SQLI, 3:webshell_useing, 4:XXE, 5:other}
+    switch = {1:webshell_upload, 2:SQLI, 3:webshell_useing}
     mode=2
     if mode==-1:
         mode=random.randint(1, 4)
