@@ -1,6 +1,6 @@
 ﻿### MAKE BLUE TEAM MAD
 
-学习python练习时写出的一个小项目 
+学习python时写出的一个小项目 
 
 可以模拟  WEBSHELL上传 WEBSHELL使用  SQLLI 等攻击流量
 
