@@ -80,9 +80,10 @@ def randomIP():
 def Make():
     url="http://localhost/"
     switch = {1:webshell_upload, 2:SQLI, 3:webshell_useing}
-    mode=-1
+    mode=0
+    rm = 1
     while 1:
-        if mode == -1:
+        if rm == 1:
             mode = random.randint(1, 3)
         switch[mode](url)
         time.sleep(10)
