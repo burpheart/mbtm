@@ -1,8 +1,8 @@
-### MAKE BLUE TEAM MAD
+﻿### MAKE BLUE TEAM MAD
 
-ѧϰpython��ϰʱд����һ��С��Ŀ 
+学习python练习时写出的一个小项目 
 
-����ģ��  WEBSHELL�ϴ� WEBSHELLʹ��  SQLLI �ȹ�������
+可以模拟  WEBSHELL上传 WEBSHELL使用  SQLLI 等攻击流量
 
-���������Ի����� ��ɢ���Ӿ��� ������ʵ��������
+可以用于迷惑蓝队 分散蓝队精力 混淆真实攻击流量
 
