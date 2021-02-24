@@ -63,6 +63,7 @@ def webshell_useing(url='http://127.0.0.1/'):
     mode=1
     print('webshell_useing')
     chopper_mock(url)
+    raw_mock(url)
 def chopper_mock(url):
     requests.post(url,data=chopper[1].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
     requests.post(url,data=chopper[2].replace("pass",gen_str()), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
